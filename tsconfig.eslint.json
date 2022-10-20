@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "baseUrl": "."
+  },
+  "include": [
+    "./packages/babel-plugin-pipe/src/**/*.ts",
+    "./packages/babel-plugin-pipe/test/**/*.ts",
+    "./vitest.config.ts"
+  ]
+}

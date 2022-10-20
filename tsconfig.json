@@ -1,0 +1,10 @@
+
+
+{
+  "extends": "./tsconfig.base.json",
+  "references": [
+    {
+      "path": "packages/babel-plugin-pipe"
+    }
+  ]
+}
