@@ -36,8 +36,10 @@
       "import": "./build/esm/*.js"
     }
   },
+  "dependencies": {
+    "@babel/core": "^7.19.1"
+  },
   "devDependencies": {
-    "@babel/core": "^7.19.1",
     "@babel/types": "^7.19.4",
     "@types/babel-plugin-tester": "^9.0.5",
     "@types/babel__core": "^7.1.19",

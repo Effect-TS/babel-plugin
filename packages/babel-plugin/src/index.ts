@@ -3,9 +3,35 @@ import type { Binding } from "@babel/traverse"
 
 const pipeModules = ["@fp-ts/data/Function"]
 
+/**
+ * The objective of this Babel plugin is to improve the performance of pipeable
+ * APIs by re-writing calls to `pipe` at compile time to be directly call the
+ * piped methods.
+ *
+ * Concretely, this results in the following code example:
+ *
+ * ```ts
+ * pipe(a, f(() => b), g(() => c))
+ * ```
+ *
+ * being transformed into direct calls to the previously piped functions:
+ *
+ * ```ts
+ * g(() => c)(f(() => b)(a))
+ * ```
+ *
+ * Calls to `pipe` are considered `CallExpression`s in the Babel AST.  To ensure
+ * that all calls to pipe are re-written correctly, the following cases must be
+ * handled:
+ *
+ *   1. When `pipe` is imported as a variable from a module and referenced as an
+ *      `Identifier` in the AST
+ *   2. When `pipe` is imported as a namespace from a module and referenced as
+ *      part of a `MemberExpression`
+ */
 export default function plugin({ types: t }: typeof babel): babel.PluginObj {
   return {
-    name: "pipe",
+    name: "fp-ts",
     visitor: {
       Program: {
         exit: (path) => {
@@ -60,36 +86,37 @@ export default function plugin({ types: t }: typeof babel): babel.PluginObj {
       },
       CallExpression: {
         enter: (path) => {
-          const callee = path.node.callee
-          if (
-            (t.isIdentifier(callee) && callee.name === "pipe") ||
-            (t.isMemberExpression(callee) && t.isIdentifier(callee.property)) && callee.property.name === "pipe"
-          ) {
-            const pipeBinding = path.scope.getBinding("pipe")
-            if (pipeBinding != null) {
-              const binding = pipeBinding.path.parent
-              if (
-                t.isImportDeclaration(binding) &&
-                pipeModules.includes(binding.source.value)
-              ) {
-                console.log("HERE")
-                const args = path.node.arguments
-                let newCall = args[0]
-                if (newCall != null) {
-                  for (let i = 1; i < args.length; i++) {
-                    const arg = args[i]
-                    if (arg != null) {
-                      newCall = t.callExpression(
-                        arg as babel.types.CallExpression,
-                        [newCall]
-                      )
-                    }
-                  }
-                  // Rewrite the call to `pipe`
-                  path.replaceWith(newCall)
-                  // De-reference the call to `pipe`
-                  pipeBinding.dereference()
-                }
+          // Get the `callee` of the `CallExpression`
+          const callee = path.get("callee")
+          // Check if the `callee` references `pipe`
+          const calleeReferencesPipe = pipeModules.some((module) => {
+            return callee.referencesImport(module, "pipe")
+          })
+          if (calleeReferencesPipe) {
+            // Build a new `CallExpression` from the arguments to `pipe`
+            const args = path.node.arguments
+            let newCall = args[0]
+            if (newCall == null) return
+            for (let i = 1; i < args.length; i++) {
+              const arg = args[i] as babel.types.CallExpression
+              if (arg != null) {
+                newCall = t.callExpression(arg, [newCall])
+              }
+            }
+
+            // Replace the call to `pipe` with the new `CallExpression`
+            path.replaceWith(newCall)
+
+            // De-reference the import binding to decrement the import's reference
+            // count
+            if (callee.isIdentifier()) {
+              const binding = path.scope.getBinding("pipe")
+              binding?.dereference()
+            } else if (callee.isMemberExpression()) {
+              const object = callee.get("object")
+              if (object.isIdentifier()) {
+                const binding = object.scope.getBinding(object.node.name)
+                binding?.dereference()
               }
             }
           }
