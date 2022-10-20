@@ -1,4 +1,4 @@
-import plugin from "@repo-tooling/babel-plugin"
+import plugin from "@repo-tooling/babel-plugin-fp-ts"
 import pluginTester from "babel-plugin-tester"
 
 pluginTester({

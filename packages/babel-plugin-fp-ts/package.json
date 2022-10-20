@@ -1,5 +1,5 @@
 {
-  "name": "@repo-tooling/babel-plugin",
+  "name": "@repo-tooling/babel-plugin-fp-ts",
   "version": "0.0.0",
   "type": "module",
   "license": "MIT",
