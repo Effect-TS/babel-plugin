@@ -39,14 +39,14 @@
     "incremental": true,
     "removeComments": false,
     "paths": {
-      "@repo-tooling/babel-plugin-pipe": [
-        "./packages/babel-plugin-pipe/src/index.ts"
+      "@repo-tooling/babel-plugin": [
+        "./packages/babel-plugin/src/index.ts"
       ],
-      "@repo-tooling/babel-plugin-pipe/test/*": [
-        "./packages/babel-plugin-pipe/test/*"
+      "@repo-tooling/babel-plugin/test/*": [
+        "./packages/babel-plugin/test/*"
       ],
-      "@repo-tooling/babel-plugin-pipe/*": [
-        "./packages/babel-plugin-pipe/src/*"
+      "@repo-tooling/babel-plugin/*": [
+        "./packages/babel-plugin/src/*"
       ]
     }
   },
