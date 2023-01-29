@@ -4,7 +4,7 @@
   "extends": "./tsconfig.base.json",
   "references": [
     {
-      "path": "packages/babel-plugin-pipe"
+      "path": "packages/babel-plugin-fp-ts"
     }
   ]
 }

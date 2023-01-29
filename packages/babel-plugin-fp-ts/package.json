@@ -1,12 +1,12 @@
 {
-  "name": "@repo-tooling/babel-plugin-pipe",
+  "name": "@repo-tooling/babel-plugin-fp-ts",
   "version": "0.0.0",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/repo-tooling/fp-ts",
-    "directory": "packages/babel-plugin-pipe"
+    "directory": "packages/babel-plugin"
   },
   "publishConfig": {
     "access": "public",
@@ -36,12 +36,14 @@
       "import": "./build/esm/*.js"
     }
   },
+  "dependencies": {
+    "@babel/core": "^7.19.1"
+  },
   "devDependencies": {
-    "@babel/core": "^7.19.1",
     "@babel/types": "^7.19.4",
     "@types/babel-plugin-tester": "^9.0.5",
     "@types/babel__core": "^7.1.19",
-    "add": "^2.0.6",
+    "@types/babel__traverse": "^7.18.2",
     "babel-plugin-tester": "^10.1.0"
   },
   "config": {
