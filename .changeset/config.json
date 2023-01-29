@@ -1,11 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.2.0/schema.json",
-  "changelog": [
-    "@changesets/changelog-github",
-    {
-      "repo": "repo-tooling/fp-ts"
-    }
-  ],
+  "changelog": ["@changesets/changelog-github", { "repo": "repo-tooling/fp-ts" }],
   "commit": false,
   "linked": [],
   "access": "restricted",
