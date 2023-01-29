@@ -1,21 +1,54 @@
+/**
+ * @since 1.0.0
+ */
 import type * as babel from "@babel/core"
 import type { Binding } from "@babel/traverse"
 
+/**
+ * The configuration options for `@effect/babel-plugin`.
+ *
+ * @since 1.0.0
+ * @category models
+ */
 export interface PluginConfig {
-  readonly pipeImports?: ReadonlyArray<string>
-  readonly identityImports?: ReadonlyArray<string>
+  /**
+   * Rewrites calls to `pipe` to directly call the piped functions.
+   *
+   * By default, the plugin will only rewrite calls to `pipe` imported from
+   * `@fp-ts/core/Function`. However, the `targetImports` configuration option
+   * can be used to allow the plugin to rewrite calls to `pipe` imported from
+   * custom paths.
+   */
+  readonly rewritePipe?: false | {
+    targetImports: ReadonlyArray<string>
+  }
+  /**
+   * Rewrites calls to `identity` to remove them entirely.
+   *
+   * By default, the plugin will only rewrite calls to `identity` imported from
+   * `@fp-ts/core/Function`. However, the `targetImports` configuration option
+   * can be used to allow the plugin to rewrite calls to `identity` imported
+   * from custom paths.
+   */
+  readonly rewriteIdentity?: false | {
+    targetImports: ReadonlyArray<string>
+  }
 }
 
-const pipeImports = ["@fp-ts/data/Function"]
-const identityImports = ["@fp-ts/data/Function"]
+const targetImports = ["@fp-ts/core/Function"]
 
 const defaultOptions: Required<PluginConfig> = {
-  pipeImports,
-  identityImports
+  rewritePipe: {
+    targetImports
+  },
+  rewriteIdentity: {
+    targetImports
+  }
 }
 
-export default function plugin({ types: t }: typeof babel, options: PluginConfig): babel.PluginObj<PluginConfig> {
-  const { identityImports, pipeImports } = { ...defaultOptions, ...options }
+const plugin = ({ types: t }: typeof babel, options: PluginConfig): babel.PluginObj<PluginConfig> => {
+  const rewritePipeConfig = options.rewritePipe ?? defaultOptions.rewritePipe
+  const rewriteIdentityConfig = options.rewriteIdentity ?? defaultOptions.rewriteIdentity
   return {
     name: "fp-ts",
     visitor: {
@@ -26,13 +59,25 @@ export default function plugin({ types: t }: typeof babel, options: PluginConfig
       },
       CallExpression: {
         enter: (path) => {
-          rewritePipe(path, t, pipeImports)
-          rewriteIdentity(path, identityImports)
+          if (typeof rewritePipeConfig === "object") {
+            rewritePipe(path, t, rewritePipeConfig.targetImports)
+          }
+          if (typeof rewriteIdentityConfig === "object") {
+            rewriteIdentity(path, rewriteIdentityConfig.targetImports)
+          }
         }
       }
     }
   }
 }
+
+/**
+ * The `@effect/babel-plugin` plugin.
+ *
+ * @since 1.0.0
+ * @category plugin
+ */
+export default plugin
 
 const removeUnusedImports = (
   path: babel.NodePath<babel.types.Program>,
@@ -89,8 +134,8 @@ const removeUnusedImports = (
 
 /**
  * The objective of this Babel transformer is to improve the performance of
- * pipeable APIs by re-writing calls to `pipe` at compile time to be directly
- * call the piped methods.
+ * pipeable APIs by re-writing calls to `pipe` at compile time to directly call
+ * the piped methods.
  *
  * Concretely, this results in the following code example:
  *
@@ -146,6 +191,35 @@ const rewritePipe = (
   }
 }
 
+/**
+ * The objective of this Babel transformer is to improve the performance of
+ * pipeable APIs by re-writing calls to `identity` at compile time to remove
+ * them entirely
+ *
+ * Concretely, this results in the following code example:
+ *
+ * ```ts
+ * const test = identity(a)
+ * ```
+ *
+ * being transformed to remove calls to `identity`:
+ *
+ * ```ts
+ * const test = a
+ * ```
+ *
+ * Calls to `identity` will also be removed when part of a `pipe` call:
+ *
+ * ```ts
+ * pipe(a, identity, f(() => b))
+ * ```
+ *
+ * will be transformed to:
+ *
+ * ```ts
+ * const test = f(() => b)(a);
+ * ```
+ */
 const rewriteIdentity = (
   path: babel.NodePath<babel.types.CallExpression>,
   identityImports: ReadonlyArray<string>

@@ -12,9 +12,7 @@
     "preserveSymlinks": true,
     "moduleResolution": "node",
     "noEmit": false,
-    "lib": [
-      "ES2021"
-    ],
+    "lib": ["ES2021"],
     "sourceMap": true,
     "declarationMap": true,
     "strict": true,
@@ -31,7 +29,7 @@
     "stripInternal": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false,
     "strictNullChecks": true,
     "baseUrl": ".",
     "target": "ES2021",
@@ -39,16 +37,19 @@
     "incremental": true,
     "removeComments": false,
     "paths": {
-      "@repo-tooling/babel-plugin-fp-ts": [
-        "./packages/babel-plugin-fp-ts/src/index.ts"
-      ],
-      "@repo-tooling/babel-plugin-fp-ts/test/*": [
-        "./packages/babel-plugin-fp-ts/test/*"
-      ],
-      "@repo-tooling/babel-plugin-fp-ts/*": [
-        "./packages/babel-plugin-fp-ts/src/*"
-      ]
-    }
+      "@repo-tooling/babel-plugin": ["./src/index.ts"],
+      "@repo-tooling/babel-plugin/test/*": ["./test/*"],
+      "@repo-tooling/babel-plugin/examples/*": ["./examples/*"],
+      "@repo-tooling/babel-plugin/*": ["./src/*"]
+    },
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "diagnostics": {
+          "1002": "none"
+        }
+      }
+    ]
   },
   "include": [],
   "exclude": ["node_modules", "build", "lib"]
