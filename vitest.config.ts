@@ -10,8 +10,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@repo-tooling/babel-plugin/test": path.join(__dirname, "test"),
-      "@repo-tooling/babel-plugin": path.join(__dirname, "src")
+      "@effect/babel-plugin/test": path.join(__dirname, "test"),
+      "@effect/babel-plugin": path.join(__dirname, "src")
     }
   }
 })
