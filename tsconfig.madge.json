@@ -4,8 +4,8 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@repo-tooling/babel-plugin": ["./build/esm/index.js"],
-      "@repo-tooling/babel-plugin/*": ["./build/esm/*"]
+      "@effect/babel-plugin": ["./build/esm/index.js"],
+      "@effect/babel-plugin/*": ["./build/esm/*"]
     }
   },
   "include": ["./build/esm/**/*.js"]

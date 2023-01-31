@@ -1,5 +1,5 @@
 {
-  "name": "@repo-tooling/babel-plugin",
+  "name": "@effect/babel-plugin",
   "version": "0.0.0",
   "publishConfig": {
     "access": "public",
@@ -7,14 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/repo-tooling/babel-plugin.git"
+    "url": "https://github.com/Effect-TS/babel-plugin.git"
   },
   "author": "Michael Arnaldi <ma@matechs.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/repo-tooling/babel-plugin/issues"
+    "url": "https://github.com/effect/Effect-TS/issues"
   },
-  "homepage": "https://github.com/repo-tooling/babel-plugin",
+  "homepage": "https://github.com/effect/Effect-TS",
   "scripts": {
     "example": "ts-node --project tsconfig.examples.json",
     "version": "changeset version && pnpm install --no-frozen-lockfile && pnpm run docs-update",

@@ -2,4 +2,4 @@
 "@effect/babel-plugin": minor
 ---
 
-migrate to new project structure
+convert repo to effect org

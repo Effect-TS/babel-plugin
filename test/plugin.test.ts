@@ -1,4 +1,4 @@
-import plugin from "@repo-tooling/babel-plugin"
+import plugin from "@effect/babel-plugin"
 import pluginTester from "babel-plugin-tester"
 
 pluginTester({

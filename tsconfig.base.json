@@ -37,10 +37,10 @@
     "incremental": true,
     "removeComments": false,
     "paths": {
-      "@repo-tooling/babel-plugin": ["./src/index.ts"],
-      "@repo-tooling/babel-plugin/test/*": ["./test/*"],
-      "@repo-tooling/babel-plugin/examples/*": ["./examples/*"],
-      "@repo-tooling/babel-plugin/*": ["./src/*"]
+      "@effect/babel-plugin": ["./src/index.ts"],
+      "@effect/babel-plugin/test/*": ["./test/*"],
+      "@effect/babel-plugin/examples/*": ["./examples/*"],
+      "@effect/babel-plugin/*": ["./src/*"]
     },
     "plugins": [
       {

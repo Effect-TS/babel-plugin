@@ -57,8 +57,8 @@ babel --plugins @effect/babel-plugin script.js
 ### Via Node API
 
 ```javascript
-require('babel-core').transform('var inc = add(1)', {
-  plugins: ['annotate-pure-calls'],
+require("babel-core").transform("pipe(a, f(() => b))", {
+  plugins: ["@effect/babel-plugin"],
 })
 ```
 
