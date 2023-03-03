@@ -35,7 +35,7 @@ export interface PluginConfig {
   }
 }
 
-const targetImports = ["@fp-ts/core/Function"]
+const targetImports = ["@effect/data/Function"]
 
 const defaultOptions: Required<PluginConfig> = {
   rewritePipe: {
